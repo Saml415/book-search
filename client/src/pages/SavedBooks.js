@@ -7,6 +7,10 @@ import {
   Button,
 } from "react-bootstrap";
 
+import { useQuery, useMutation } from "@apollo/client";
+
+import { QUERY_USER } from "../utils/queries";
+
 import { getMe, deleteBook } from "../utils/API";
 import Auth from "../utils/auth";
 import { removeBookId } from "../utils/localStorage";
@@ -19,6 +23,12 @@ const SavedBooks = () => {
 
   useEffect(() => {
     const getUserData = async () => {
+      //   const { loading, data } = useQuery(QUERY_USER, {
+      //     fetchPolicy: "cache-and-network",
+      //   });
+
+      // const userData = data?.getMe || [];
+
       try {
         const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -58,7 +68,7 @@ const SavedBooks = () => {
       }
 
       const updatedUser = await response.json();
-      setUserData(updatedUser);
+      // setUserData(updatedUser);
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
     } catch (err) {
