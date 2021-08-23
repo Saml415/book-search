@@ -8,21 +8,18 @@ import {
 } from "react-bootstrap";
 
 import { useQuery, useMutation } from "@apollo/client";
-
 import { QUERY_USER } from "../utils/queries";
 import { REMOVE_BOOK } from "../utils/mutations";
 
-import Auth from "../utils/auth";
 import { removeBookId } from "../utils/localStorage";
+import Auth from "../utils/auth";
 
 const SavedBooks = () => {
   const { loading, data } = useQuery(QUERY_USER, {
     fetchPolicy: "cache-and-network",
   });
 
-  // use this to determine if `useEffect()` hook needs to run again
-
-  const userData = data?.getMe || [];
+  const userData = data?.me || data?.user || {};
 
   const [removeBook] = useMutation(REMOVE_BOOK);
 
@@ -40,7 +37,7 @@ const SavedBooks = () => {
       removeBookId(bookId);
       window.location.replace("/saved");
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -58,7 +55,7 @@ const SavedBooks = () => {
       </Jumbotron>
       <Container>
         <h2>
-          {userData.savedBooks.length
+          {userData.bookCount
             ? `Viewing ${userData.savedBooks.length} saved ${
                 userData.savedBooks.length === 1 ? "book" : "books"
               }:`
@@ -94,4 +91,5 @@ const SavedBooks = () => {
     </>
   );
 };
+
 export default SavedBooks;
